@@ -35,7 +35,6 @@ void Countdown :: resume(){
 
 void Countdown :: pause(){
     // Record the time already elapsed since the countdown started:
-    // current time (millis()) minus the original start time gives the elapsed duration.
     this->elapsedTimeBeforePause = millis() - startTimeMs;
     // Mark the countdown as not running so future calls know it's paused.
     this->running = false;
@@ -46,7 +45,7 @@ unsigned long Countdown :: getRemainingTime(){
     // duration minus time elapsed since start.
     if(running == true){
         return durationMs - (millis() - startTimeMs);
-    // If the countdown is paused, return duration minus the elapsed time recorded at pause.
+    // If the countdown is paused
     }else if(running == false){
         return durationMs - elapsedTimeBeforePause;
     }
@@ -55,8 +54,6 @@ unsigned long Countdown :: getRemainingTime(){
 bool Countdown :: isFinished(){
     // Return true when the elapsed time since the (adjusted) start time
     // is greater than or equal to the configured duration.
-    // Uses millis() to compute elapsed time: when paused/resumed the startTimeMs
-    // is adjusted so this check reflects the effective running time.
     return (millis() - startTimeMs) >= durationMs; 
 }
 
