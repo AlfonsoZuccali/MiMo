@@ -1,0 +1,64 @@
+#include "countdown.h"
+#include <Arduino.h>
+
+Countdown :: Countdown(){
+    //when starting the countdown, everything is set to 0
+    reset(); 
+}
+
+void Countdown :: start(unsigned long durationMs){
+    //to avoid starting when it already has
+    if(running == false){
+        this->durationMs = durationMs;
+        this->startTimeMs = millis();
+        this->elapsedTimeBeforePause = 0;
+        this->running = true;
+    }
+}
+
+void Countdown :: reset(){
+    this->startTimeMs = 0;
+    this->durationMs = 0;
+    this->elapsedTimeBeforePause = 0;
+    this->running = false;
+}
+
+void Countdown :: resume(){
+    //you can only resume if it is paused
+    if(this->running == false){
+        //the difference between the two points will return when was the last
+        //moment before pause
+        this->startTimeMs = millis() - elapsedTimeBeforePause;
+        this->running = true;
+    }
+}
+
+void Countdown :: pause(){
+    // Record the time already elapsed since the countdown started:
+    // current time (millis()) minus the original start time gives the elapsed duration.
+    this->elapsedTimeBeforePause = millis() - startTimeMs;
+    // Mark the countdown as not running so future calls know it's paused.
+    this->running = false;
+}
+
+unsigned long Countdown :: getRemainingTime(){
+    // If the countdown is currently running, calculate remaining time as:
+    // duration minus time elapsed since start.
+    if(running == true){
+        return durationMs - (millis() - startTimeMs);
+    // If the countdown is paused, return duration minus the elapsed time recorded at pause.
+    }else if(running == false){
+        return durationMs - elapsedTimeBeforePause;
+    }
+}
+
+bool Countdown :: isFinished(){
+    // Return true when the elapsed time since the (adjusted) start time
+    // is greater than or equal to the configured duration.
+    // Uses millis() to compute elapsed time: when paused/resumed the startTimeMs
+    // is adjusted so this check reflects the effective running time.
+    return (millis() - startTimeMs) >= durationMs; 
+}
+
+
+
