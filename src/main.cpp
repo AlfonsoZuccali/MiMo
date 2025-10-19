@@ -1,17 +1,24 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
+#include "countdown.h"
+#include "pomodoroManager.h"
+#include <string.h>
 
+#define BUTTON_SKIP 17
+#define BUTTON_START_PAUSE 15
 
-// put function declarations here:
-int const LED =13;
+PomodoroManager miGestor;
+pomodoroStatus ultimo_estado;
+
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
-  pinMode(LED, OUTPUT);  
+  Serial.begin(9600);
+  delay(1000);
+  pinMode(BUTTON_SKIP,INPUT_PULLUP);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  digitalWrite(LED,HIGH);
+  int skip =digitalRead(BUTTON_SKIP);
+    Serial.write(skip);
 }
