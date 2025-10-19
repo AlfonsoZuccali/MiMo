@@ -45,10 +45,11 @@ unsigned long Countdown :: getRemainingTime(){
     // duration minus time elapsed since start.
     if(running == true){
         return durationMs - (millis() - startTimeMs);
-    // If the countdown is paused
-    }else if(running == false){
-        return durationMs - elapsedTimeBeforePause;
+    
     }
+    // If the countdown is paused
+    return durationMs - elapsedTimeBeforePause;
+    
 }
 
 bool Countdown :: isFinished(){
@@ -57,5 +58,8 @@ bool Countdown :: isFinished(){
     return (millis() - startTimeMs) >= durationMs; 
 }
 
+bool Countdown :: isRunning(){
+    return running;
+}
 
 
