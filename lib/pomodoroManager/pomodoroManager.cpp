@@ -22,28 +22,6 @@ void PomodoroManager :: setUpSession(int rounds, unsigned long focusTime, unsign
     this->timer.start(focusTimeMs);
 }
 
-void PomodoroManager :: transitionToNextState(){
-    //if it passed a focus period, we set a rest period
-    if(currentState == pomodoroStatus :: FOCUS){
-        this->currentState = pomodoroStatus :: REST;
-        this->timer.start(restTimeMs);
-
-
-    }else if(currentState == pomodoroStatus :: REST){ //if it was a rest period
-        //if it was the last round, we basically end the session
-        if(round == roundObjective ){
-            this->timer.reset();
-            this->round = 0;
-            this->roundObjective = 0;
-            this->currentState = pomodoroStatus :: IDLE;
-        }else{//if it wasnt the last round, we update the round number and start a new focus period
-            this->round = round + 1;
-            this->timer.start(focusTimeMs);
-            this->currentState = pomodoroStatus :: FOCUS;
-        }
-    }
-}
-
 void PomodoroManager :: update(){
     //it only updates if a timer finished
     if(timer.isFinished() == true){
@@ -69,4 +47,26 @@ void PomodoroManager :: buttonStartPause(){
 
 pomodoroStatus PomodoroManager :: getState(){
     return currentState;
+}
+
+void PomodoroManager :: transitionToNextState(){
+    //if it passed a focus period, we set a rest period
+    if(currentState == pomodoroStatus :: FOCUS){
+        this->currentState = pomodoroStatus :: REST;
+        this->timer.start(restTimeMs);
+
+
+    }else if(currentState == pomodoroStatus :: REST){ //if it was a rest period
+        //if it was the last round, we basically end the session
+        if(round == roundObjective ){
+            this->timer.reset();
+            this->round = 0;
+            this->roundObjective = 0;
+            this->currentState = pomodoroStatus :: IDLE;
+        }else{//if it wasnt the last round, we update the round number and start a new focus period
+            this->round = round + 1;
+            this->timer.start(focusTimeMs);
+            this->currentState = pomodoroStatus :: FOCUS;
+        }
+    }
 }

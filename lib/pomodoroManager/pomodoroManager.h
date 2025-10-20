@@ -13,12 +13,12 @@ class PomodoroManager{
     PomodoroManager();
     //it starts a new session, from round 1 with custom times
     void setUpSession(int rounds, unsigned long focusTime, unsigned long restTime);
-    //pauses, starts or resumes the timer
-    void buttonStartPause();
-    //it skips the current timer
-    void buttonSkip();
     //checks for updates in the pomodoro
     void update();
+    //it skips the current timer
+    void buttonSkip();    
+    //pauses, starts or resumes the timer
+    void buttonStartPause();
     //returns what state the pomodoro is in FOCUS, REST or IDLE
     pomodoroStatus getState();
 
