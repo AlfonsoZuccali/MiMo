@@ -35,7 +35,6 @@ class PomodoroManager{
     unsigned long focusTimeMs;
     //stores in miliseconds the amount of rest time
     unsigned long restTimeMs;
-
     //helps transitioning to the next state
     void transitionToNextState();
 };

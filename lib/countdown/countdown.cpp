@@ -8,7 +8,7 @@ Countdown :: Countdown(){
 
 void Countdown :: start(unsigned long durationMs){
     //to avoid starting when it already has
-    if(running == false){
+    if(isFinished() == true || running == false){
         this->durationMs = durationMs;
         this->startTimeMs = millis();
         this->elapsedTimeBeforePause = 0;
@@ -49,13 +49,16 @@ unsigned long Countdown :: getRemainingTime(){
     }
     // If the countdown is paused
     return durationMs - elapsedTimeBeforePause;
-    
 }
 
 bool Countdown :: isFinished(){
     // Return true when the elapsed time since the (adjusted) start time
     // is greater than or equal to the configured duration.
-    return (millis() - startTimeMs) >= durationMs; 
+    if(running == true){
+        return (millis() - startTimeMs) >= durationMs;
+    }else{
+        return false;
+    }
 }
 
 bool Countdown :: isRunning(){
