@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
+#include <RTClib.h>
 #include "countdown.h"
 #include "pomodoroManager.h"
 #include "button.h"
@@ -37,26 +38,27 @@ void loop() {
     skip.update();
     if(start.wasPressed() == true){
         Gestor.buttonStartPause();
+        digitalWrite(BUZZER_PIN, HIGH);
+        digitalWrite(BUZZER_PIN, LOW);
+
     }else if(skip.wasPressed() == true){
         Gestor.buttonSkip();
+        digitalWrite(BUZZER_PIN, HIGH);
+        digitalWrite(BUZZER_PIN, LOW);
     }
 
     if(Gestor.getState() == pomodoroStatus :: FOCUS){
         digitalWrite(FOCUS_PIN,HIGH);
-        digitalWrite(BUZZER_PIN, HIGH);
         digitalWrite(REST_PIN,LOW);
         digitalWrite(IDLE_PIN,LOW);
     }else if(Gestor.getState() == pomodoroStatus :: REST){
         digitalWrite(FOCUS_PIN,LOW);
         digitalWrite(REST_PIN,HIGH);
-        digitalWrite(BUZZER_PIN, HIGH);
         digitalWrite(IDLE_PIN,LOW);
     }else if(Gestor.getState() == pomodoroStatus :: IDLE){
         digitalWrite(FOCUS_PIN,LOW);
         digitalWrite(REST_PIN,LOW);
         digitalWrite(IDLE_PIN,HIGH);
-        digitalWrite(BUZZER_PIN, HIGH);
     }
     Gestor.update();
-    digitalWrite(BUZZER_PIN, LOW);
 }
