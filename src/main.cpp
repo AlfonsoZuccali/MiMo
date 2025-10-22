@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
 #include <RTClib.h>
+#include "sound.h"
 #include "countdown.h"
 #include "pomodoroManager.h"
 #include "button.h"
@@ -17,10 +18,13 @@ Button start(START_PIN,50);
 
 PomodoroManager Gestor;
 pomodoroStatus lastState;
+Sound Buzzer(BUZZER_PIN);
 
 int rounds = 3;
 unsigned long focusTimeMs = 5*1000;
 unsigned long restTimeMs = 5*1000;
+unsigned long lastTimeLog;
+unsigned long interval = 25;
 
 void setup() {
     pinMode(FOCUS_PIN, OUTPUT);
@@ -29,22 +33,23 @@ void setup() {
     pinMode(SKIP_PIN,INPUT_PULLUP);
     pinMode(START_PIN,INPUT_PULLUP);
     pinMode(BUZZER_PIN, OUTPUT);
+
     Gestor.setUpSession(rounds,focusTimeMs,restTimeMs);
 
-    lastState = Gestor.getState();
+    Buzzer.setSoundIntervalMs(50);
+
 }
 void loop() {
     start.update();
     skip.update();
+
     if(start.wasPressed() == true){
         Gestor.buttonStartPause();
-        digitalWrite(BUZZER_PIN, HIGH);
-        digitalWrite(BUZZER_PIN, LOW);
+        Buzzer.powerUp();
 
     }else if(skip.wasPressed() == true){
         Gestor.buttonSkip();
-        digitalWrite(BUZZER_PIN, HIGH);
-        digitalWrite(BUZZER_PIN, LOW);
+        Buzzer.powerUp();
     }
 
     if(Gestor.getState() == pomodoroStatus :: FOCUS){
@@ -60,5 +65,11 @@ void loop() {
         digitalWrite(REST_PIN,LOW);
         digitalWrite(IDLE_PIN,HIGH);
     }
+
+    lastState = Gestor.getState();
     Gestor.update();
+    if(lastState != Gestor.getState()){
+        Buzzer.powerUp();
+    }
+    Buzzer.powerDownAfterInterval();
 }
