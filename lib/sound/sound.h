@@ -5,13 +5,19 @@
 class Sound{
 
     public:
-        Sound(int pin);
+        //constructor
+        Sound(int pin, unsigned long intervalMs);
 
-        void setSoundIntervalMs(unsigned long interval);
-        void duringInterval();
+        //powers Up the sound pin and records the time when it happened in "lastPowerUpTimeLog"
         void powerUp();
+
+        //powers down the sound pin
         void powerDown();
+
+        //turns off power from the sound pin after the interval set in constructor
         void powerDownAfterInterval();
+
+        //turns on power from the sound pin after the interval set in constructor
         void powerUpAfterInterval();
 
     private:

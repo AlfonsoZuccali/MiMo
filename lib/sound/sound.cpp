@@ -5,8 +5,9 @@ int pin;
 unsigned long durationMs;
 unsigned long lastPowerUpTimeLog;
 
-Sound :: Sound(int pin){
+Sound :: Sound(int pin, unsigned long intervalMs){
     this->pin = pin;
+    this->durationMs =intervalMs;
 }
 
 void Sound :: powerUp(){
@@ -16,10 +17,6 @@ void Sound :: powerUp(){
 
 void Sound :: powerDown(){
     digitalWrite(pin, LOW);
-}
-
-void Sound :: setSoundIntervalMs(unsigned long intervalMs){
-    durationMs = intervalMs;
 }
 
 bool Sound :: intervalPassed(){
@@ -37,4 +34,3 @@ void Sound :: powerUpAfterInterval(){
         powerUp();
     }
 }
-

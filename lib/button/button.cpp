@@ -1,8 +1,8 @@
 #include "button.h"
 
-Button::Button(int pin, unsigned long debounce_ms) {
+Button::Button(int pin, unsigned long debounce_ms){
     this->pin = pin;
-    debounce_ms = debounce_ms;
+    this->debounce_ms = debounce_ms;
     
     // Initilize pin as pullup
     pinMode(this->pin, INPUT_PULLUP);
@@ -55,6 +55,7 @@ bool Button::wasPressed() {
 
 bool Button::isPressed() {
     //it returns the curren stable state
-    //in pullup, low means pressed
+    //in pullup, low means pressed    
+
     return (lastSteadyState == LOW);
 }

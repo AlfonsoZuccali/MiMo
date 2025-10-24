@@ -6,6 +6,7 @@
 #include "pomodoroManager.h"
 #include "button.h"
 
+//define pins
 #define FOCUS_PIN 26
 #define REST_PIN 25
 #define IDLE_PIN 33
@@ -13,20 +14,24 @@
 #define START_PIN 14
 #define BUZZER_PIN 13
 
+//set input and output objects
 Button skip(SKIP_PIN,50);
 Button start(START_PIN,50);
+Sound Buzzer(BUZZER_PIN, 25);
 
+//initialize our Pomodoro
 PomodoroManager Gestor;
 pomodoroStatus lastState;
-Sound Buzzer(BUZZER_PIN);
 
+//set pomodoro settings
 int rounds = 3;
-unsigned long focusTimeMs = 5*1000;
-unsigned long restTimeMs = 5*1000;
+unsigned long focusTimeMs = 1*1000;
+unsigned long restTimeMs = 1.5*1000;
 unsigned long lastTimeLog;
-unsigned long interval = 25;
 
 void setup() {
+
+    //set pins
     pinMode(FOCUS_PIN, OUTPUT);
     pinMode(REST_PIN, OUTPUT);
     pinMode(IDLE_PIN, OUTPUT);
@@ -34,15 +39,17 @@ void setup() {
     pinMode(START_PIN,INPUT_PULLUP);
     pinMode(BUZZER_PIN, OUTPUT);
 
+    //set up the pomodoro
     Gestor.setUpSession(rounds,focusTimeMs,restTimeMs);
 
-    Buzzer.setSoundIntervalMs(50);
 
 }
 void loop() {
+    //check the buttons states
     start.update();
     skip.update();
 
+    //if-statements for button feedback, sound and pomodoro actions
     if(start.wasPressed() == true){
         Gestor.buttonStartPause();
         Buzzer.powerUp();
@@ -51,7 +58,8 @@ void loop() {
         Gestor.buttonSkip();
         Buzzer.powerUp();
     }
-
+    
+    //sync led and pomodoro status
     if(Gestor.getState() == pomodoroStatus :: FOCUS){
         digitalWrite(FOCUS_PIN,HIGH);
         digitalWrite(REST_PIN,LOW);
@@ -66,8 +74,11 @@ void loop() {
         digitalWrite(IDLE_PIN,HIGH);
     }
 
+    //we store the state of the pomodoro before updating it
     lastState = Gestor.getState();
     Gestor.update();
+
+    //if the state changed, the buzzer will sound
     if(lastState != Gestor.getState()){
         Buzzer.powerUp();
     }

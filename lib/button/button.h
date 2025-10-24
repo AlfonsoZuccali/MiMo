@@ -5,30 +5,31 @@
 
 #include <Arduino.h>
 
-class Button {
-public:
-    //Constructor, pin and debounce time as parameter
-    Button(int pin, unsigned long debounce_ms = 50);
+class Button{
 
-    //updates
-    void update();
+    public:
+        //Constructor, pin and debounce time as parameter
+        Button(int pin, unsigned long debounce_ms = 50);
 
-    // returns whether the button was pressed one time
-    bool wasPressed();
+        //updates the state of the button
+        void update();
 
-    // returns whether the button is being pressed
-    bool isPressed();
+        // returns whether the button was pressed one time
+        bool wasPressed();
 
-private:
-    int pin;
-    unsigned long debounce_ms;
+        // returns whether the button is being pressed
+        bool isPressed();
 
-    int lastSteadyState;
-    int lastFlickerableState;
-    unsigned long lastDebounceTime;
-    
-    // flag that helps with internal methods
-    bool wasPressedFlag; 
+    private:
+        int pin;
+        unsigned long debounce_ms;
+
+        int lastSteadyState;
+        int lastFlickerableState;
+        unsigned long lastDebounceTime;
+        
+        // flag that helps with internal methods
+        bool wasPressedFlag;
 };
 
 #endif
