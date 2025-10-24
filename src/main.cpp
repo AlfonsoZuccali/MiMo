@@ -5,6 +5,7 @@
 #include "countdown.h"
 #include "pomodoroManager.h"
 #include "button.h"
+#include "clock.h"
 
 //define pins
 #define FOCUS_PIN 26
@@ -14,10 +15,15 @@
 #define START_PIN 14
 #define BUZZER_PIN 13
 
+#define DATA 21
+#define CLOCK 22
+#define CLOCK_RESET 19
+
 //set input and output objects
 Button skip(SKIP_PIN,50);
 Button start(START_PIN,50);
 Sound Buzzer(BUZZER_PIN, 25);
+RtcClock rtc(DATA,CLOCK,CLOCK_RESET);
 
 //initialize our Pomodoro
 PomodoroManager Gestor;
@@ -29,8 +35,12 @@ unsigned long focusTimeMs = 1*1000;
 unsigned long restTimeMs = 1.5*1000;
 unsigned long lastTimeLog;
 
+
+
 void setup() {
 
+    Serial.begin(9600);
+    
     //set pins
     pinMode(FOCUS_PIN, OUTPUT);
     pinMode(REST_PIN, OUTPUT);
@@ -42,12 +52,26 @@ void setup() {
     //set up the pomodoro
     Gestor.setUpSession(rounds,focusTimeMs,restTimeMs);
 
-
+    //set up rtc
+    rtc.begin();
 }
 void loop() {
     //check the buttons states
     start.update();
     skip.update();
+
+    char datestring[20];
+
+    snprintf_P(datestring,
+                countof(datestring),
+                PSTR("%02u/%02u/%04u %02u:%02u:%02u"),
+                rtc.getDateTime().Month(),
+                rtc.getDateTime().Day(),
+                rtc.getDateTime().Year(),
+                rtc.getDateTime().Hour(),
+                rtc.getDateTime().Minute(),
+                rtc.getDateTime().Second());
+    Serial.println(datestring);
 
     //if-statements for button feedback, sound and pomodoro actions
     if(start.wasPressed() == true){
@@ -83,4 +107,6 @@ void loop() {
         Buzzer.powerUp();
     }
     Buzzer.powerDownAfterInterval();
+
+    
 }
