@@ -1,10 +1,6 @@
 #include "pomodoroManager.h"
 #include <Arduino.h>
 
-int roundObjectiveGlobal;
-unsigned long focusTimeMsGlobal;
-unsigned long restTimeMsGlobal;
-
 PomodoroManager :: PomodoroManager(){
     this->round = 0;
     this->roundObjective = 0;
@@ -18,13 +14,10 @@ PomodoroManager :: PomodoroManager(){
 void PomodoroManager :: setUpSession(int rounds, unsigned long focusTime, unsigned long restTime){
     //sets the rounds
     this->roundObjective = rounds;
-    roundObjectiveGlobal = rounds;
     this->round = 1;
     //sets the pomodoro status, focus and rest time
     this->focusTimeMs = focusTime;
-    focusTimeMsGlobal = focusTime;
     this->restTimeMs = restTime;
-    restTimeMsGlobal = restTime;
     this->currentState = pomodoroStatus :: IDLE;
 }
 
@@ -65,7 +58,7 @@ void PomodoroManager :: transitionToNextState(){
     }else if(currentState == pomodoroStatus :: REST){ //if it was a rest period
         //if it was the last round, we basically end the session
         if(round >= roundObjective ){
-            setUpSession(roundObjectiveGlobal,focusTimeMsGlobal,restTimeMsGlobal);
+            setUpSession(this->roundObjective, this->focusTimeMs, this->restTimeMs);
         }else{//if it wasnt the last round, we update the round number and start a new focus period
             round = round + 1;
             timer.start(focusTimeMs);
