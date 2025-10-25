@@ -9,6 +9,8 @@ class Clock{
         Clock();
         void connectNtp();
         void printLocalTime();
+        String getFormattedDateTime();
+
     private:
         //for connecting ntp
         const char* ntpServer = "pool.ntp.org";
