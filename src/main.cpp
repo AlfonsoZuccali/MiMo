@@ -17,10 +17,6 @@
 #define START_PIN 14
 #define BUZZER_PIN 13
 
-#define DATA 21
-#define CLOCK 22
-#define CLOCK_RESET 19
-
 //set input and output objects
 Button skip(SKIP_PIN,50);
 Button start(START_PIN,50);
@@ -78,7 +74,7 @@ void loop() {
         Buzzer.powerUp();
     }
     Serial.println("NTP Time:");
-    realTimeClock.printLocalTime();
+    Serial.println(realTimeClock.getFormattedDateTime());
 
 
     //sync led and pomodoro status
