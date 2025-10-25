@@ -16,6 +16,7 @@ class RtcClock{
         void begin();
         //returns the date and time
         RtcDateTime getDateTime();
+        void printDateTime(const RtcDateTime& dt);
     private:
         ThreeWire wire;
         RtcDS1302<ThreeWire> rtc;

@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
-#include <RTClib.h>
+#include <RtcDS1302.h>
 #include "sound.h"
 #include "countdown.h"
 #include "pomodoroManager.h"
@@ -31,8 +31,8 @@ pomodoroStatus lastState;
 
 //set pomodoro settings
 int rounds = 3;
-unsigned long focusTimeMs = 1*1000;
-unsigned long restTimeMs = 1.5*1000;
+unsigned long focusTimeMs = 5*1000;
+unsigned long restTimeMs = 5*1000;
 unsigned long lastTimeLog;
 
 
@@ -49,29 +49,19 @@ void setup() {
     pinMode(START_PIN,INPUT_PULLUP);
     pinMode(BUZZER_PIN, OUTPUT);
 
+    //set up rtc
+    rtc.begin();
+
     //set up the pomodoro
     Gestor.setUpSession(rounds,focusTimeMs,restTimeMs);
 
-    //set up rtc
-    rtc.begin();
+
 }
 void loop() {
     //check the buttons states
     start.update();
     skip.update();
-
-    char datestring[20];
-
-    snprintf_P(datestring,
-                countof(datestring),
-                PSTR("%02u/%02u/%04u %02u:%02u:%02u"),
-                rtc.getDateTime().Month(),
-                rtc.getDateTime().Day(),
-                rtc.getDateTime().Year(),
-                rtc.getDateTime().Hour(),
-                rtc.getDateTime().Minute(),
-                rtc.getDateTime().Second());
-    Serial.println(datestring);
+    rtc.printDateTime(rtc.getDateTime());
 
     //if-statements for button feedback, sound and pomodoro actions
     if(start.wasPressed() == true){
@@ -107,6 +97,4 @@ void loop() {
         Buzzer.powerUp();
     }
     Buzzer.powerDownAfterInterval();
-
-    
 }
