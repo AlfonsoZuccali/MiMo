@@ -1,11 +1,13 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
-#include <RtcDS1302.h>
+#include <WiFi.h>
+#include <time.h>
 #include "sound.h"
 #include "countdown.h"
 #include "pomodoroManager.h"
 #include "button.h"
 #include "clock.h"
+#include "wifiConnect.h"
 
 //define pins
 #define FOCUS_PIN 26
@@ -23,11 +25,14 @@
 Button skip(SKIP_PIN,50);
 Button start(START_PIN,50);
 Sound Buzzer(BUZZER_PIN, 25);
-RtcClock rtc(DATA,CLOCK,CLOCK_RESET);
 
 //initialize our Pomodoro
 PomodoroManager Gestor;
 pomodoroStatus lastState;
+
+WifiConnect wifi;
+
+Clock realTimeClock;
 
 //set pomodoro settings
 int rounds = 3;
@@ -37,9 +42,10 @@ unsigned long lastTimeLog;
 
 
 
+
 void setup() {
 
-    Serial.begin(9600);
+    Serial.begin(115200);
     
     //set pins
     pinMode(FOCUS_PIN, OUTPUT);
@@ -50,18 +56,17 @@ void setup() {
     pinMode(BUZZER_PIN, OUTPUT);
 
     //set up rtc
-    rtc.begin();
-
     //set up the pomodoro
     Gestor.setUpSession(rounds,focusTimeMs,restTimeMs);
 
-
+    wifi.connect();
+    realTimeClock.connectNtp();
 }
 void loop() {
     //check the buttons states
     start.update();
     skip.update();
-    rtc.printDateTime(rtc.getDateTime());
+    
 
     //if-statements for button feedback, sound and pomodoro actions
     if(start.wasPressed() == true){
@@ -72,7 +77,10 @@ void loop() {
         Gestor.buttonSkip();
         Buzzer.powerUp();
     }
-    
+    Serial.println("NTP Time:");
+    realTimeClock.printLocalTime();
+
+
     //sync led and pomodoro status
     if(Gestor.getState() == pomodoroStatus :: FOCUS){
         digitalWrite(FOCUS_PIN,HIGH);
