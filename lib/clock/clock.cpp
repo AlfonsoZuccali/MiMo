@@ -6,12 +6,13 @@ Clock :: Clock(){}
 
 void Clock :: connectNtp(){
 
-    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-    setenv("TZ","<-03>3",1);
-    tzset();
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
+  setenv("TZ","<-03>3",1);
+  tzset();
 }
 
-void Clock :: printLocalTime(){
+void Clock :: printLocalDateTime(){
+  //Create a structure to store time information
   struct tm timeinfo;
   if(!getLocalTime(&timeinfo)){
     Serial.println("Failed to obtain time");
