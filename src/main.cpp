@@ -8,6 +8,7 @@
 #include "button.h"
 #include "clock.h"
 #include "wifiConnect.h"
+#include "alarm.h"
 
 //define pins
 #define FOCUS_PIN 26
@@ -29,6 +30,8 @@ pomodoroStatus lastState;
 WifiConnect wifi;
 
 Clock realTimeClock;
+
+Alarm wakeUp;
 
 //set pomodoro settings
 int rounds = 3;
@@ -57,26 +60,38 @@ void setup() {
 
     wifi.connect();
     realTimeClock.connectNtp();
+    wakeUp.setAlarm(6,30);
 }
 void loop() {
+    //update the wakeUp alarm status
+    wakeUp.update();
+    start.update();
+    skip.update();
+
+    if(skip.wasPressed() == true){
+        wakeUp.snooze();
+    }
+
+    if(start.wasPressed() == true){
+        wakeUp.stop();
+    }
+
+    //sound if its time to wake up
+    if(wakeUp.getIsActive() == true){
+        Buzzer.powerUp();
+    }
+
+
+    //turn off when the alarm hour passed
+    if (wakeUp.getIsActive() == false){
+        Buzzer.powerDown();
+    }
+
+    /*
     //check the buttons states
     start.update();
     skip.update();
-    
-
-    //if-statements for button feedback, sound and pomodoro actions
-    if(start.wasPressed() == true){
-        Gestor.buttonStartPause();
-        Buzzer.powerUp();
-
-    }else if(skip.wasPressed() == true){
-        Gestor.buttonSkip();
-        Buzzer.powerUp();
-    }
-    Serial.println("NTP Time:");
-    Serial.println(realTimeClock.getFormattedDateTime());
-
-
+ 
     //sync led and pomodoro status
     if(Gestor.getState() == pomodoroStatus :: FOCUS){
         digitalWrite(FOCUS_PIN,HIGH);
@@ -95,10 +110,5 @@ void loop() {
     //we store the state of the pomodoro before updating it
     lastState = Gestor.getState();
     Gestor.update();
-
-    //if the state changed, the buzzer will sound
-    if(lastState != Gestor.getState()){
-        Buzzer.powerUp();
-    }
-    Buzzer.powerDownAfterInterval();
+    */
 }
