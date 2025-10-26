@@ -8,8 +8,9 @@ class Clock{
         //constructor  
         Clock();
         void connectNtp();
-        void printLocalTime();
+        void printLocalDateTime();
         String getFormattedDateTime();
+        
 
     private:
         //for connecting ntp
