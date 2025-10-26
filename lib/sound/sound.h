@@ -15,17 +15,21 @@ class Sound{
         void powerDown();
 
         //turns off power from the sound pin after the interval set in constructor
-        void powerDownAfterInterval();
+        void powerDownAfterInterval(unsigned long duration);
 
         //turns on power from the sound pin after the interval set in constructor
-        void powerUpAfterInterval();
+        void powerUpAfterInterval(unsigned long duration);
+
+        //to change interval without having to make another object
+        void setInterval(unsigned long duration);
 
     private:
         unsigned long durationMs;
         int pin;
         unsigned long lastPowerUpTimeLog;
 
-        bool intervalPassed();
+        bool intervalPassed(unsigned long duration, unsigned long lastPower);
+        unsigned long getDurationMs();
 };
 
 #endif
