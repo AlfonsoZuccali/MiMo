@@ -31,12 +31,6 @@ void Sound :: powerDownAfterInterval(unsigned long duration){
     }
 }
 
-void Sound :: powerUpAfterInterval(unsigned long duration){
-    if(intervalPassed(duration, lastPowerDownTimeLog) == true){
-        powerUp();
-    }
-}
-
 void Sound :: setInterval(unsigned long duration){
     this->durationMs = duration;
 }

@@ -14,9 +14,5 @@ class WifiConnect{
     private:
         const char* ssid = "***REMOVED***";
         const char* password = "***REMOVED***";
-
-
-
 };
-
 #endif

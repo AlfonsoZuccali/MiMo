@@ -5,23 +5,25 @@
 #include "sound.h"
 
 Alarm :: Alarm(){
+    //set everything to false until alarm is set
     enabled = false;
     isActive = false;
     stopped = false;
 }
 
 void Alarm :: setAlarm(int hour, int minute){
+    //get the alarm set and enabled
     this->hour = hour;
     this->minute = minute;
     enabled = true;
 }
 
 void Alarm :: update(){
-
     if(enabled == false){
         return;
     }
 
+    //set behavior for the snooze state
     if(snoozed == true){
         if((millis() - snoozeStartTime) >= snoozeDuration){
             snoozed = false;
@@ -31,12 +33,15 @@ void Alarm :: update(){
         }
     }
 
+    //struct that will contain the time information
     struct tm timeinfo;
     
+    //in case we cant synchronize the time
     if (!getLocalTime(&timeinfo)) {
       return;
     }
 
+    //logic for activating in the set time
     if(timeinfo.tm_hour == hour && timeinfo.tm_min == minute){
         if(isActive == false && stopped == false){
             isActive = true;
@@ -45,6 +50,7 @@ void Alarm :: update(){
         stopped = false;
     }
 }
+
 
 void Alarm :: stop(){
     if(isActive == true){
