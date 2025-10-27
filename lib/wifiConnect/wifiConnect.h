@@ -14,9 +14,5 @@ class WifiConnect{
     private:
         const char* ssid = "Zuccali ACERCA";
         const char* password = "0142441728";
-
-
-
 };
-
 #endif
