@@ -2,7 +2,6 @@
 #include <time.h>
 #include "alarm.h"
 #include "clock.h"
-#include "sound.h"
 
 Alarm :: Alarm(){
     enabled = false;
