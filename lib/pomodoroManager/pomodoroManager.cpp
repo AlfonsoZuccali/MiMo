@@ -66,3 +66,15 @@ void PomodoroManager :: transitionToNextState(){
         }
     }
 }
+
+void PomodoroManager :: printStates(){
+    if(getState() == pomodoroStatus :: FOCUS){
+        Serial.println("FOCUS");
+    }else if(getState() == pomodoroStatus :: REST){
+        Serial.println("REST");
+    }else if(getState() == pomodoroStatus :: IDLE){
+        Serial.println("IDLE");
+    }
+
+    Serial.println(timer.getRemainingTime());
+}
