@@ -26,7 +26,7 @@ class Alarm{
         bool isActive;
         bool stopped;
         unsigned long snoozeStartTime;
-        const unsigned long snoozeDuration = 2*60*1000;
+        const unsigned long snoozeDuration = 5*60*1000;
 
 
 };
