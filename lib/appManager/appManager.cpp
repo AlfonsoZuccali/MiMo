@@ -33,7 +33,7 @@ void AppManager :: begin(){
     wifi.connect();
 
     rtc.connectNtp();
-    alarmClock.setAlarm(23,30);
+    alarmClock.setAlarm(8,0);
     pomodoro.setUpSession(4,60*1000*60,60*1000*10);
 }
 
@@ -41,6 +41,7 @@ void AppManager :: update(){
     switch(activeApp){
         case AppType :: POMODORO:
             pomodoro.update();
+            pomodoro.printStates();
         break;
         case AppType :: ALARM:
             alarmClock.update();
@@ -63,12 +64,15 @@ void AppManager :: handleInput(){
 
     //button control for modeButton
     if(modeButton.wasPressed()){    
+        Serial.print("MODE CHANGED TO:");
         switch(activeApp){
             case AppType :: POMODORO:
                 activeApp = AppType::ALARM;
+                Serial.print("ALARM");
             break;
             case AppType :: ALARM:
                 activeApp = AppType :: POMODORO;
+                Serial.print("POMODORO");
             break;
         }
 
