@@ -8,10 +8,12 @@ class Alarm{
 
     public:
         Alarm();
+        //sets the alarm with hour and minute
         void setAlarm(int hour, int minute);
         bool isEnabled();
         void stop();
         void snooze();
+        //responsible for updating the values of the alarm on each loop iteration
         void update();
         bool getIsActive();
     
