@@ -22,6 +22,8 @@ class PomodoroManager{
     //returns what state the pomodoro is in FOCUS, REST or IDLE
     pomodoroStatus getState();
 
+    void printStates();
+
     private:
     //stores the number of rounds
     int round;

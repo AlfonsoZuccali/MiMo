@@ -12,7 +12,7 @@ class WifiConnect{
         void connectNtp();
 
     private:
-        const char* ssid = "Zuccali ACERCA";
-        const char* password = "0142441728";
+        const char* ssid = "***REMOVED***";
+        const char* password = "***REMOVED***";
 };
 #endif
