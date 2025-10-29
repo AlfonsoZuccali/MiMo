@@ -9,7 +9,7 @@ void WifiConnect :: connect(){
     WiFi.begin(this->ssid,this->password);
 
     while (WiFi.status() != WL_CONNECTED) {
-        Serial.print(".");
+        delay(5);
     }
      Serial.println("WiFi connected.");
 }

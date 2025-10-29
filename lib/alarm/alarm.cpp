@@ -2,7 +2,6 @@
 #include <time.h>
 #include "alarm.h"
 #include "clock.h"
-#include "sound.h"
 
 Alarm :: Alarm(){
     //set everything to false until alarm is set
