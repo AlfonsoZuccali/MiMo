@@ -9,7 +9,7 @@ class Button{
 
     public:
         //Constructor, pin and debounce time as parameter
-        Button(int pin, unsigned long debounce_ms = 25);
+        Button(int pin, unsigned long debounce_ms = 50);
 
         //updates the state of the button
         void update();
