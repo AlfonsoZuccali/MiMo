@@ -4,4 +4,4 @@
 .vscode/launch.json
 .vscode/ipch
 .lib/credentials.h
-.lib/appManger/appManger.md
+lib/credentials.h
