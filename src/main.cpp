@@ -10,13 +10,11 @@
 #include "wifiConnect.h"
 #include "alarm.h"
 #include "appManager.h"
+#include "spotify.h"
 
-
-AppManager OS;
-
+    AppManager OS;
 
 void setup() {
-
     Serial.begin(115200);
     OS.begin();
 

@@ -11,6 +11,7 @@
 WifiConnect wifi;
 Alarm alarmClock;
 PomodoroManager pomodoro;
+SpotifyClient spotify;
 
 AppManager :: AppManager():
     modeButton(MODE_BUTTON_PIN),
@@ -31,20 +32,22 @@ void AppManager :: begin(){
     pinMode(BUZZER_PIN, OUTPUT);
 
     wifi.connect();
-
     rtc.connectNtp();
-    alarmClock.setAlarm(8,0);
+    spotify.begin();
+    alarmClock.setAlarm(23,07);
     pomodoro.setUpSession(4,60*1000*60,60*1000*10);
 }
 
 void AppManager :: update(){
+    
+    //even if we are not seeeing it, the pomodoro and alarm still runs
+    pomodoro.update();
+    alarmClock.update();
     switch(activeApp){
         case AppType :: POMODORO:
-            pomodoro.update();
             pomodoro.printStates();
         break;
         case AppType :: ALARM:
-            alarmClock.update();
             if(alarmClock.getIsActive() == true){
                 buzzer.powerUp();
             }
@@ -52,6 +55,10 @@ void AppManager :: update(){
             if (alarmClock.getIsActive() == false){
                 buzzer.powerDown();
             }
+        break;
+        case AppType :: SPOTIFY:
+            //we update the visuals only when we need it
+            spotify.update();
         break;
     }
 }
@@ -71,13 +78,17 @@ void AppManager :: handleInput(){
                 Serial.print("ALARM");
             break;
             case AppType :: ALARM:
+                activeApp = AppType :: SPOTIFY;
+                Serial.print("SPOTIFY");
+            break;
+            case AppType :: SPOTIFY:
                 activeApp = AppType :: POMODORO;
                 Serial.print("POMODORO");
             break;
         }
-
+    }
     //button control for selectButton
-    }else if(selectButton.wasPressed()){
+    if(selectButton.wasPressed()){
         switch(activeApp){
             case AppType :: POMODORO:
                 pomodoro.buttonStartPause();
@@ -85,27 +96,43 @@ void AppManager :: handleInput(){
             case AppType :: ALARM:
                 alarmClock.stop();
             break;
-        }
-    
-    //button control for upButton       
-    }else if(upButton.wasPressed()){
+            case AppType :: SPOTIFY:
+                Serial.println("Paused or play");    
+                spotify.playPause();
+                
+            break;
+        }     
+    }
+    //button control for upButton
+    if(upButton.wasPressed()){
         switch(activeApp){
             case AppType :: POMODORO:
-                pomodoro.buttonStartPause();
+                //pomodoro.buttonStartPause();
             break;
             case AppType :: ALARM:
-                alarmClock.stop();
+                //alarmClock.stop();
+            break;
+            case AppType :: SPOTIFY:
+                Serial.println("Next");
+                spotify.nextTrack();
+                spotify.update();
             break;
         }
-
+    }
     //button control for downButton
-    }else if(downButton.wasPressed()){
+    if(downButton.wasPressed()){
         switch(activeApp){
             case AppType :: POMODORO:
                 pomodoro.buttonSkip();
             break;
             case AppType :: ALARM:
                 alarmClock.snooze();
+            break;
+            case AppType :: SPOTIFY:
+                Serial.println("Previous");
+                spotify.previousTrack();
+                spotify.update();
+               
             break;
         }
     }

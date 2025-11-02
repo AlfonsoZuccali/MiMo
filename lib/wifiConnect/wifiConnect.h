@@ -1,5 +1,6 @@
 #ifndef WIFICONNECT_H
 #define WIFICONNECT_H
+#include "../credentials.h"
 #include <WiFi.h>
 #include <time.h>
 #include <Arduino.h>
@@ -12,7 +13,7 @@ class WifiConnect{
         void connectNtp();
 
     private:
-        const char* ssid = "***REMOVED***";
-        const char* password = "***REMOVED***";
+        const char* ssid = SSID;
+        const char* password = PASSWORD;
 };
 #endif
