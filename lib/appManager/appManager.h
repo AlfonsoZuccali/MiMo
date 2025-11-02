@@ -6,6 +6,7 @@
 #include "alarm.h"
 #include "sound.h"
 #include "wifiConnect.h"
+#include "spotify.h"
 #include <Arduino.h>
 
 #define MODE_BUTTON_PIN 14
@@ -16,7 +17,7 @@
 
 
 enum class AppType{
-    POMODORO, ALARM
+    POMODORO, ALARM, SPOTIFY
 };
 
 class AppManager{
@@ -40,6 +41,8 @@ class AppManager{
         PomodoroManager pomodoro;
         Alarm clockAlarm;
         Clock rtc;
+        SpotifyClient spotify;
+
 };
 
 
