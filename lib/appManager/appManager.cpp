@@ -34,7 +34,7 @@ void AppManager :: begin(){
     wifi.connect();
     rtc.connectNtp();
     spotify.begin();
-    //alarmClock.setAlarm(7,0);
+    alarmClock.setAlarm(23,07);
     pomodoro.setUpSession(4,60*1000*60,60*1000*10);
 }
 
@@ -86,9 +86,9 @@ void AppManager :: handleInput(){
                 Serial.print("POMODORO");
             break;
         }
-
+    }
     //button control for selectButton
-    }else if(selectButton.wasPressed()){
+    if(selectButton.wasPressed()){
         switch(activeApp){
             case AppType :: POMODORO:
                 pomodoro.buttonStartPause();
@@ -101,10 +101,10 @@ void AppManager :: handleInput(){
                 spotify.playPause();
                 
             break;
-        }
-    
-    //button control for upButton       
-    }else if(upButton.wasPressed()){
+        }     
+    }
+    //button control for upButton
+    if(upButton.wasPressed()){
         switch(activeApp){
             case AppType :: POMODORO:
                 //pomodoro.buttonStartPause();
@@ -115,12 +115,12 @@ void AppManager :: handleInput(){
             case AppType :: SPOTIFY:
                 Serial.println("Next");
                 spotify.nextTrack();
-                
+                spotify.update();
             break;
         }
-
+    }
     //button control for downButton
-    }else if(downButton.wasPressed()){
+    if(downButton.wasPressed()){
         switch(activeApp){
             case AppType :: POMODORO:
                 pomodoro.buttonSkip();
@@ -131,9 +131,9 @@ void AppManager :: handleInput(){
             case AppType :: SPOTIFY:
                 Serial.println("Previous");
                 spotify.previousTrack();
+                spotify.update();
                
             break;
-
         }
     }
 }
